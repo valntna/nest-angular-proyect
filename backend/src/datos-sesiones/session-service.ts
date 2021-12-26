@@ -3,10 +3,12 @@ import { Injectable } from '@nestjs/common';
 import * as sqlite3 from 'sqlite3';
 var result: string[] = [];
 var users = [];
-const user = '2';
+var sessions: string[] = [];
+const user = '3';
 const company = '3';
 const firstDay: string = '2017-03-09';
 const lastDay: string = '2017-03-20';
+const interval: number = 15;
 
 @Injectable()
 export class SessionService {
@@ -25,14 +27,6 @@ export class SessionService {
     
     }
 	
-	
-		//const date : string[] = [];
-		//const session : string[] = [];
-		//const FechaInicial: string = '2017-02-09';
-		//const FechaFinal: string = '2018-06-09';
-		//const User: string = '3';
-		//const Company: string = '3';
-		//const Interval: number = 15;
 	deleteTable(table:string): void {
 		this.db.run(`DROP TABLE IF EXISTS `+ table, function (err) {
 			if (err) {
@@ -88,37 +82,37 @@ export class SessionService {
 	};
 	
 	
-	makeAuxTable() {
+	makeAuxTableAll() {
 	
-		let crearAuxTable = `CREATE TABLE AuxTable (user_id INTEGER NOT NULL,
+		let createAuxTable = `CREATE TABLE AuxTable (user_id INTEGER NOT NULL,
 												   occurred_at TEXT NOT NULL)`;
 
-		let insertarAuxTableUsuario = `INSERT INTO AuxTable (user_id, occurred_at)
+		let getAllUsersOneComp = `INSERT INTO AuxTable (user_id, occurred_at)
 								  SELECT UserID, Fecha
 								  FROM calls
 								  WHERE(
-									  (CompanyID = ?)
+									  (CompanyID = ${company})
 								  AND
-								  ( substr(Fecha, 1, 10) BETWEEN ? AND ? )
+								  ( substr(Fecha, 1, 10) BETWEEN ${firstDay} AND '${lastDay}' )
 								)`;
 		
 		return new Promise<number>((resolve, reject) => {
 			try {
 				this.db.serialize(() => {
 					this.deleteTable('AuxTable');
-					this.db.run(crearAuxTable);
-					this.db.run(insertarAuxTableUsuario, company, firstDay, lastDay, function (err) {
+					this.db.run(createAuxTable);
+					this.db.run(getAllUsersOneComp,  function (err) {
 						if (err) {
 							throw err;
 						}
 						console.log(`Data inserted!`);
 				    });
-					this.db.each('SELECT user_id AS time FROM AuxTable', function (err, rows) {
+					this.db.each('SELECT user_id AS user FROM AuxTable', function (err, rows) {
 						if (err) {
 							console.log('there´s a problem with calendar table');
 							throw err;
 						}
-						users.push(rows.time);
+						//users.push(rows.user);
 					},
 						(err, rowCount) => {
 							if (err) reject(err);
@@ -136,17 +130,138 @@ export class SessionService {
 	};
 
 	async getUsers(): Promise<string[]> {
-		await this.makeAuxTable();
+		await this.makeAuxTableAll();
 		return users;
+	};
+
+	makeAuxTableOne() {
+
+		let createAuxTable = `CREATE TABLE AuxTable (user_id INTEGER NOT NULL,
+												   occurred_at TEXT NOT NULL)`;
+
+		let getOneUsersOneComp = `INSERT INTO AuxTable (user_id, occurred_at)
+								  SELECT UserID, Fecha
+								  FROM calls
+								  WHERE(
+									  (CompanyID = ${company})
+								  AND (UserID = ${user})
+								  AND
+								  ( substr(Fecha, 1, 10) BETWEEN ${firstDay} AND '${lastDay}' )
+								)`;
+
+		return new Promise<number>((resolve, reject) => {
+			try {
+				this.db.serialize(() => {
+					this.deleteTable('AuxTable');
+					this.db.run(createAuxTable);
+					this.db.run(getOneUsersOneComp, function (err) {
+						if (err) {
+							throw err;
+						}
+						console.log(`Data inserted!`);
+					});
+					this.db.each('SELECT user_id AS user FROM AuxTable', function (err, rows) {
+						if (err) {
+							console.log('there´s a problem with AuxTable');
+							throw err;
+						}
+						//users.push(rows.user);
+					},
+						(err, rowCount) => {
+							if (err) reject(err);
+							resolve(rowCount);
+						}
+					);
+
+				});
+			} catch (error) {
+				console.log(`Error`);
+				reject();
+			}
+		});
+	};
+
+	async getOneUser(): Promise<string[]> {
+		await this.makeAuxTableOne();
+		return users;
+	};
+
+	querySessions() {
+
+	let countSessions = `SELECT  Day,
+               		CASE WHEN new_session_count
+					IS NULL THEN 0 ELSE new_session_count
+					END  AS ActiveSessions
+		            FROM
+		            (
+		                SELECT Day, new_session_count
+		                FROM(SELECT Day FROM Calendar) a
+		                LEFT JOIN(SELECT substr(occurred_at, 1, 10) AS Date,
+		                COUNT(DISTINCT global_session_id) new_session_count
+						FROM
+		                    (
+		                            SELECT user_id,
+		                            occurred_at,
+		                            SUM(is_new_session)
+									OVER (ORDER BY user_id, occurred_at)
+									AS global_session_id
+		                            FROM
+		                            (
+		                                SELECT user_id, occurred_at,
+		                                CASE WHEN CAST(strftime('%s', substr(occurred_at, 1, 23)) as integer) - CAST(strftime('%s', substr(last_event, 1, 23)) as integer) >= (60 * ${interval})
+		                                OR last_event IS NULL
+		                                THEN 1 ELSE 0
+	                                    END   AS is_new_session
+	                                    FROM
+	                                    (
+	                                        SELECT *,
+	                                        LAG(occurred_at, 1) OVER
+	                                        (PARTITION BY user_id ORDER BY occurred_at)
+											AS last_event
+	                                        FROM AuxTable
+	                                    )
+		                            )
+		                        )
+		               	GROUP BY Date) b
+                        ON a.Day = b.Date
+		                )`;
+
+
+		return new Promise<number>((resolve, reject) => {
+			try {
+				this.db.serialize(() => {
+					this.db.each(countSessions, function (err, rows) {
+						if (err) {
+							console.log('there´s a problem counting active sessions');
+							throw err;
+						}
+						sessions.push(rows.ActiveSessions);
+					},
+						(err, rowCount) => {
+							if (err) reject(err);
+							resolve(rowCount);
+						}
+					);
+					this.deleteTable('AuxTable');
+					this.deleteTable('Calendar');
+				});
+			} catch (error) {
+				console.log(`Error`);
+				reject();
+			}
+		});
+	};
+
+	async getSessions(): Promise<string[]> {
+		await this.querySessions();
+		return sessions;
 	};
 
 
 	printArray(array: string[]) {
-		console.log('hey, print calendar!');
 		for (var i = 0; i < array.length; i++) {
 			console.log(array[i]);
 		}
-		console.log('hey, print calendar!');
     }
 	
 

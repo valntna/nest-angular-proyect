@@ -8,15 +8,26 @@ export class DatosSesionesController {
     constructor(private sessionService: SessionService) { }
 
     @Get()
-    async getCalendar(): Promise<string[]> {
+    async getCalendar(): Promise<[string, string][]> {
+
         await this.sessionService.init();
         let date: string[] = await this.sessionService.getDays();
-        let test: string[] = await this.sessionService.getUsers();
+        await this.sessionService.makeAuxTableOne();
+        let sessions: string[] = await this.sessionService.getSessions();
         
-        this.sessionService.printArray(date);
-        this.sessionService.printArray(test);
+        //this.sessionService.printArray(date);
+        //this.sessionService.printArray(sessions);
+
         this.sessionService.close();
-        return test;
+        let points: [string, string][] = [];
+        for (var i = 0; i < date.length; i++) {
+            points[i] = [date[i], sessions[i]];
+        }
+
+        //console.log(date.length);
+        //console.log(sessions.length);
+
+        return points;
     }
 
 
@@ -30,30 +41,22 @@ export class DatosSesionesController {
     //    return [['test', 3]];
 
     //}
-        //sessionService.printCalendar(date)
-        //sessionService.getCalendar()
-
-
-
-    //getCalendar(): string[] {
-    //    const sessionService = new SessionService();
-    //    var date: string[]=[];
-    //    sessionService.init();
-    //    date = sessionService.getCalendar(); 
-    //    sessionService.close();
-    //    sessionService.printCalendar(date);
-    //    return date;
-    //}
-
 
     //async getCalendar(): Promise<string[]> {
-    //    const sessionService = new SessionService();
-    //    sessionService.init();
+    //    await this.sessionService.init();
+    //    let date: string[] = await this.sessionService.getDays();
+    //    let test: string[] = await this.sessionService.getOneUser();
 
-    //    var date: string[] = await sessionService.getCalendar();
-    //    sessionService.printCalendar(date);
-    //    sessionService.close();
-    //    return date;
-    //}
+    //    this.sessionService.printArray(date);
+    //    this.sessionService.printArray(test);
+    //    this.sessionService.close();
+    //    return test;
+//   }
+
+
+
+
+
+
     
 }

@@ -1,6 +1,6 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-
+import {LineChartComponent} from '../line-chart/line-chart.component'
 
 interface Data {
   
@@ -11,42 +11,48 @@ interface Data {
   lastDay: string;
 }
 
-
+//export let points:[string,string][]=[];
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
+
 export class FormComponent implements OnInit {
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private lineChart: LineChartComponent) { }
   
 
-  ngOnInit(): void {
-  }
+  ngOnInit() { }
 
-  async onClickSubmit(data: Data ) {
-   
-    console.log(data);
-    
+    async onClickSubmit(data: Data) {
 
-    let message = {
-      company: data.company,
-      user: data.user,
-      interval: data.interval,
-      firstDay: data.firstDay,
-      lastDay: data.lastDay
-    };
+      console.log(data);
 
-    this.apiService.createMessage(message).toPromise();
 
-    const points: [string, string][] = await this.apiService.getData().toPromise();
-  
-    for (var i = 0; i < points.length; i++) {
-      console.log(points[i]);
+      let message = {
+        company: data.company,
+        user: data.user,
+        interval: data.interval,
+        firstDay: data.firstDay,
+        lastDay: data.lastDay
+      };
+
+      console.log(await this.apiService.createMessage(message).toPromise());
+
+      
+
+      let points: [string, string][] = [];
+
+      points = await this.apiService.getData().toPromise();
+
+      for (var i = 0; i < points.length; i++) {
+        console.log(points[i]);
+      }
+
+      this.lineChart.makeGraph(points);
+
+      points = [];
     }
-    
-  }
-
-}
+ }

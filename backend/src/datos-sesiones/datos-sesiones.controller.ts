@@ -9,6 +9,7 @@ export class DatosSesionesController {
 
 
     filter: MessageDto;
+    
 
     @Post('/messages')
     async test(@Body() message: MessageDto): Promise<MessageDto> {
@@ -21,10 +22,11 @@ export class DatosSesionesController {
 
     @Get()
     async getData(): Promise<[string, string][]> {
-
         this.sessionService.init();
         let date: string[] = await this.sessionService.getDays(this.filter.firstDay, this.filter.lastDay);
+       //await this.sessionService.oneOrAll(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
         await this.sessionService.makeAuxTableOne(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
+        
         let sessions: string[] = await this.sessionService.getSessions(this.filter.interval);
         
         //this.sessionService.printArray(date);
@@ -32,6 +34,7 @@ export class DatosSesionesController {
 
         this.sessionService.close();
         let points: [string, string][] = [];
+        points = [];
         for (var i = 0; i < date.length; i++) {
             points[i] = [date[i], sessions[i]];
         }

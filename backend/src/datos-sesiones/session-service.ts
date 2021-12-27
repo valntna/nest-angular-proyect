@@ -8,7 +8,7 @@ var sessions: string[] = [];
 //const company = '3';
 //const firstDay: string = '2017-03-09';
 //const lastDay: string = '2017-03-20';
-const interval: number = 15;
+//const interval: number = 15;
 
 @Injectable()
 export class SessionService {
@@ -188,6 +188,16 @@ export class SessionService {
 		return users;
 	};
 
+	async oneOrAll(company:string, user:string, firstDay:string, lastDay:string) : Promise<void> {
+		if (user.toLowerCase() == "todos") {
+			await this.getUsers(company, firstDay, lastDay);
+		}
+		else {
+			await this.getOneUser(company, user, firstDay, lastDay);
+		}
+    }
+
+
 	querySessions(interval:number) {
 
 	let countSessions = `SELECT  Day,
@@ -260,7 +270,7 @@ export class SessionService {
 	};
 
 
-	printArray(array: string[]) {
+	printArray(array: string[]):void {
 		for (var i = 0; i < array.length; i++) {
 			console.log(array[i]);
 		}

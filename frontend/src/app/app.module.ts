@@ -22,7 +22,7 @@ import { FormComponent } from './form/form.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [LineChartComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

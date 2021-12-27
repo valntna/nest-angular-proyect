@@ -2,17 +2,17 @@
 
 Desafío práctica developer CoTalker
 
-Aplicación que en base a un archivo csv grafica las sesiones activas de los usuarios con filtros de:
+Aplicación que en base a un archivo .csv grafica las sesiones activas de los usuarios con filtros de:
 * Companía
 * Usuario
 * Intervalo Activo
 * Rango de Fecha
 
 ## Manejo del log de llamadas
-Ya que son alrededor de 23 millones de datos se genera una base de datos 'llamadas.db' en SQLite a través  un script de python 'log.to.database.py'
+Ya que son alrededor de 23 millones de datos se genera una base de datos ```llamadas.db``` en SQLite a través  un script de python ```log.to.database.py```
 Es un proceso corto y facilita el filtro de los datos.
 
-Los queries a la base de datos se hacen en el backend de la aplicación, más precisamente en /backend/src/datos-sesiones por medio del controlador ```datos-sesiones.controller```
+Los queries a la base de datos se hacen en el backend de la aplicación, más precisamente en ```/backend/src/datos-sesiones``` por medio del controlador ```datos-sesiones.controller```
  y el servicio ```session-service```
  
  ## Cómo correr la aplicación

@@ -33,7 +33,7 @@ las llamadas y graficar las sesiones activas. Es una aplicación sencilla que ti
 * **Intervalo Activo:** Se debe ingresar el intervalo en minutos
 * **Fecha Inicial:** Inicio del rango que se quiere graficar (*)
 * **Fecha Final:** Fin del rango que se quiere graficar (*)
-* 
+
 _(*)Deben ingresarse con formato ```YYYY-MM-DD``` para poder obtener el gráfico._
 
 Una vez ingresados los datos se envía el formulario haciendo click en el botón 'Generar'.

@@ -9,7 +9,7 @@ Aplicación que en base a un archivo csv grafica las sesiones activas de los usu
 * Rango de Fecha
 
 ## Manejo del log de llamadas
-Ya que son alrededor de 23 millones de datos se genera una base de datos 'llamadas.db' en SQlite a través  un script de python 'log.to.database.py'
+Ya que son alrededor de 23 millones de datos se genera una base de datos 'llamadas.db' en SQLite a través  un script de python 'log.to.database.py'
 Es un proceso corto y facilita el filtro de los datos.
 
 Los queries a la base de datos se hacen en el backend de la aplicación, más precisamente en /backend/src/datos-sesiones por medio del controlador ```datos-sesiones.controller```
@@ -22,7 +22,7 @@ Los queries a la base de datos se hacen en el backend de la aplicación, más pr
  
  El servidor del frontend es ```localhost:4200``` y del backend es ```localhost:3000/datos-sesiones```
  
- Un detalle importante es que al conectarse a la base de datos por SQlite3 se debe especificar la dirección completa de dónde se ubica el archivo .db
+ Un detalle importante es que al conectarse a la base de datos por SQLite3 se debe especificar la dirección completa de dónde se ubica el archivo .db
 el ```path``` se señala en la función ```init()``` en el servicio  ```session-service```.
 
 ## Uso de la aplicación

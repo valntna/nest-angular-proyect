@@ -28,14 +28,14 @@ el ```path``` se señala en la función ```init()``` en el servicio  ```session-
 ## Uso de la aplicación
 Una vez transpilados tanto el backend como el frontend basta con dirigirse a  ```localhost:4200``` en el navegador de tu preferencia y ya se puede ingresar los datos para filtrar
 las llamadas y graficar las sesiones activas. Es una aplicación sencilla que tiene 5 campos:
-* Compañía: Debe ingresarse un número
-* Usuario: puede ser el ID de un usuario en particular o se puede pedir ver todos los usuarios ingresando cualquier variación de 'todos' (no es case sensitive)
-* Intervalo Activo: se debe ingresar el intervalo en minutos
-* Fecha Inicial: Inicio del rango que se quiere graficar
-* Fecha Final: Fin del rango que se quiere graficar
+* **Compañía:** Debe ingresarse un número
+* **Usuario:** puede ser el ID de un usuario en particular o se puede pedir ver todos los usuarios ingresando cualquier variación de 'todos' (no es case sensitive)
+* **Intervalo Activo:** se debe ingresar el intervalo en minutos
+* **Fecha Inicial:** Inicio del rango que se quiere graficar
+* **Fecha Final:** Fin del rango que se quiere graficar
 
-Estos últimos dos deben ir en formato 'YYYY-MM-DD' para poder obtener el gráfico.
+Estos últimos dos deben ir en formato ```YYYY-MM-DD``` para poder obtener el gráfico.
 
-Una vez ingresados los datos se envía la _form_ haciendo click en el botón 'Generar'.
+Una vez ingresados los datos se envía el formulario haciendo click en el botón 'Generar'.
 
 Se debe esperar unos segundos para poder ver el resultado.

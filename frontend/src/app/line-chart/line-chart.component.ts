@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
-
-
+import { Chart, registerables } from 'chart.js';
 @Component({
   selector: 'app-line-chart',
   templateUrl: './line-chart.component.html',
@@ -12,10 +10,15 @@ export class LineChartComponent implements OnInit {
 
   title = 'Sesiones Activas';
 
-  chart: any[] = [];
+
+  constructor() {
+    Chart.register(...registerables);
+  }
+
 
   ngOnInit() {
-    this.chart.push(new Chart("canvas", {
+    const lineCanvasEle: any = document.getElementById('canvas');
+    new Chart(lineCanvasEle.getContext('2d'), {
 
       type: 'line',
       data: {
@@ -35,6 +38,6 @@ export class LineChartComponent implements OnInit {
             }
           ]
       }
-    }))
+    });
   }
 }

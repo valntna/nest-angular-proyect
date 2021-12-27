@@ -1,0 +1,35 @@
+<form #data="ngForm" (ngSubmit)="onClickSubmit(data.value)">
+
+  <label for="company">Compañía: </label>
+
+  <input type="text" id="company" name="company" placeholder="ej: '1', '2', ..." ngModel>
+
+  <br><br>
+
+  <label for="user"> Usuario: </label>
+
+  <input type="text" id="user" name="user" placeholder="ej : 'Todos', '1', '2', ..." ngModel>
+
+  <br><br>
+
+  <label for="interval"> Intervalo Activo (en minutos): </label>
+
+  <input type="number" id="interval" name="interval" value="15" ngModel>
+
+  <br><br>
+  Ingresar intervalo de tiempo (YYYY-MM-DD)
+
+  <label for="firstDay"> Desde: </label>
+
+  <input type="text" id="firstDay" name="firstDay" value="2017-02-10" ngModel>
+
+  <label for="lastDay"> Hasta: </label>
+  <input type="text" id="lastDay" name="lastDay" value="2019-02-10" ngModel>
+
+  <br><br><br><br>
+
+
+  <input type="submit" value="Graficar">
+
+</form>
+

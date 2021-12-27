@@ -41,22 +41,5 @@ export class DatosSesionesController {
     //    return [['test', 3]];
 
     //}
-
-    //async getCalendar(): Promise<string[]> {
-    //    await this.sessionService.init();
-    //    let date: string[] = await this.sessionService.getDays();
-    //    let test: string[] = await this.sessionService.getOneUser();
-
-    //    this.sessionService.printArray(date);
-    //    this.sessionService.printArray(test);
-    //    this.sessionService.close();
-    //    return test;
-//   }
-
-
-
-
-
-
     
 }

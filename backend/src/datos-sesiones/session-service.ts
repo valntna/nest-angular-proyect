@@ -3,19 +3,13 @@ import { Injectable } from '@nestjs/common';
 import * as sqlite3 from 'sqlite3';
 var result: string[] = [];
 var sessions: string[] = [];
-//const user = '3';
-//const company = '3';
-//const firstDay: string = '2017-03-09';
-//const lastDay: string = '2017-03-20';
-//const interval: number = 15;
+
 
 @Injectable()
 export class SessionService {
 	private db: sqlite3.Database;
 	
 	constructor() { }
-
-	
 
     init(): void {
         const path = 'D:/Descargas/practica_cotalker/nest-angular-proyect/backend/src/datos-sesiones/database/llamadas.db';
@@ -118,7 +112,6 @@ export class SessionService {
 					},
 						(err, rowCount) => {
 							if (err) reject(err);
-							console.log(rowCount);
 							resolve(rowCount);
 						}
 					);
@@ -179,14 +172,17 @@ export class SessionService {
 		});
 	};
 
-	
+	async oneOrAll(company:string, user:string, firstDay:string, lastDay:string): Promise<number> {
+		await this.asyncIf(company, user, firstDay, lastDay);
+		return 1;
+	};
 
-	async oneOrAll(company:string, user:string, firstDay:string, lastDay:string) : Promise<void> {
+	async asyncIf(company:string, user:string, firstDay:string, lastDay:string) : Promise<number> {
 		if (user.toLowerCase() == "todos") {
-			await this.makeAuxTableAll(company, firstDay, lastDay);
+			return (await this.makeAuxTableAll(company, firstDay, lastDay));
 		}
 		else {
-			await this.makeAuxTableOne(company, user, firstDay, lastDay);
+			return (await this.makeAuxTableOne(company, user, firstDay, lastDay));
 		}
     }
 

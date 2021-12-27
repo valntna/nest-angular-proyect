@@ -27,8 +27,8 @@ export class DatosSesionesController {
         let points: [string, string][] = [];
         this.sessionService.init();
         date= await this.sessionService.getDays(this.filter.firstDay, this.filter.lastDay);
-       //await this.sessionService.oneOrAll(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
-        await this.sessionService.makeAuxTableOne(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
+       await this.sessionService.oneOrAll(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
+        //await this.sessionService.makeAuxTableOne(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
         sessions = await this.sessionService.getSessions(this.filter.interval);
         this.sessionService.close();
         

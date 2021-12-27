@@ -13,7 +13,6 @@ export class DatosSesionesController {
 
     @Post('/messages')
     async test(@Body() message: MessageDto): Promise<MessageDto> {
-        console.log(message);
         this.filter = message;
         return message;
     }
@@ -22,25 +21,26 @@ export class DatosSesionesController {
 
     @Get()
     async getData(): Promise<[string, string][]> {
+
+        let date: string[] = [];
+        let sessions: string[] = [];
+        let points: [string, string][] = [];
         this.sessionService.init();
-        let date: string[] = await this.sessionService.getDays(this.filter.firstDay, this.filter.lastDay);
+        date= await this.sessionService.getDays(this.filter.firstDay, this.filter.lastDay);
        //await this.sessionService.oneOrAll(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
         await this.sessionService.makeAuxTableOne(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
-        
-        let sessions: string[] = await this.sessionService.getSessions(this.filter.interval);
-        
-        //this.sessionService.printArray(date);
-        //this.sessionService.printArray(sessions);
-
+        sessions = await this.sessionService.getSessions(this.filter.interval);
         this.sessionService.close();
-        let points: [string, string][] = [];
-        points = [];
+        
+        console.log(points.length);
+
         for (var i = 0; i < date.length; i++) {
             points[i] = [date[i], sessions[i]];
         }
-       
-        //console.log(date.length);
-        //console.log(sessions.length);
+    
+        date = [];
+        sessions = [];
+        this.sessionService.clean();
 
         return points;
     }

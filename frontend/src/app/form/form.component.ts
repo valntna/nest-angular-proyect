@@ -13,6 +13,7 @@ interface Data {
 
 //export let points:[string,string][]=[];
 
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -26,6 +27,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit() { }
 
+  
     async onClickSubmit(data: Data) {
 
       console.log(data);
@@ -40,19 +42,15 @@ export class FormComponent implements OnInit {
       };
 
       console.log(await this.apiService.createMessage(message).toPromise());
-
-      
+   
 
       let points: [string, string][] = [];
-
+      
       points = await this.apiService.getData().toPromise();
-
-      for (var i = 0; i < points.length; i++) {
-        console.log(points[i]);
-      }
-
+ 
       this.lineChart.makeGraph(points);
 
       points = [];
+      
     }
  }

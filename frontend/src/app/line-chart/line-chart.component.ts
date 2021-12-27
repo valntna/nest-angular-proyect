@@ -20,7 +20,7 @@ export class LineChartComponent {
 
 
   makeGraph(points:[string,string][]) {
-
+    
     let chartStatus = Chart.getChart("canvas"); // <canvas> id
     if (chartStatus != undefined) {
       chartStatus.destroy();
@@ -33,7 +33,8 @@ export class LineChartComponent {
       xAxis.push(points[i][0]);
       yAxis.push(Number(points[i][1]));
     }
-
+    points = [];
+    
     const lineCanvasEle: any = document.getElementById('canvas');
     new Chart(lineCanvasEle.getContext('2d'), {
 
@@ -56,11 +57,9 @@ export class LineChartComponent {
             }
           ]
       }
-    });
-
-    
-   
-
+    });  
+    xAxis =[];
+    yAxis = [];
   }
   
 

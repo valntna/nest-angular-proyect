@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import * as sqlite3 from 'sqlite3';
 var result: string[] = [];
-var users = [];
 var sessions: string[] = [];
 //const user = '3';
 //const company = '3';
@@ -37,6 +36,7 @@ export class SessionService {
 			console.log(`Table ${table} deleted!`);
 		});
 	};
+
 
 	getCalendar(firstDay:string, lastDay:string) {
 		
@@ -131,11 +131,7 @@ export class SessionService {
 		});
 	};
 
-	async getUsers(company: string, firstDay: string, lastDay: string): Promise<string[]> {
-		await this.makeAuxTableAll(company, firstDay, lastDay);
-		return users;
-	};
-
+	
 	makeAuxTableOne(company: string, user: string, firstDay: string, lastDay: string) {
 
 		let createAuxTable = `CREATE TABLE AuxTable (user_id INTEGER NOT NULL,
@@ -183,17 +179,14 @@ export class SessionService {
 		});
 	};
 
-	async getOneUser(company: string, user: string, firstDay: string, lastDay: string): Promise<string[]> {
-		await this.makeAuxTableOne(company, user, firstDay, lastDay);
-		return users;
-	};
+	
 
 	async oneOrAll(company:string, user:string, firstDay:string, lastDay:string) : Promise<void> {
 		if (user.toLowerCase() == "todos") {
-			await this.getUsers(company, firstDay, lastDay);
+			await this.makeAuxTableAll(company, firstDay, lastDay);
 		}
 		else {
-			await this.getOneUser(company, user, firstDay, lastDay);
+			await this.makeAuxTableOne(company, user, firstDay, lastDay);
 		}
     }
 
@@ -262,6 +255,7 @@ export class SessionService {
 				reject();
 			}
 		});
+		
 	};
 
 	async getSessions(interval:number): Promise<string[]> {
@@ -269,6 +263,10 @@ export class SessionService {
 		return sessions;
 	};
 
+	clean() {
+		result = [];
+		sessions = [];
+    }
 
 	printArray(array: string[]):void {
 		for (var i = 0; i < array.length; i++) {

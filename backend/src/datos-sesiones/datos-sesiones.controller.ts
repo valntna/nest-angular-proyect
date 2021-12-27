@@ -1,5 +1,5 @@
-import { Controller, Get, Post } from '@nestjs/common';
-
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { MessageDto } from '../messages.dto'
 import { SessionService } from './session-service'
 
 
@@ -7,13 +7,25 @@ import { SessionService } from './session-service'
 export class DatosSesionesController {
     constructor(private sessionService: SessionService) { }
 
-    @Get()
-    async getCalendar(): Promise<[string, string][]> {
 
-        await this.sessionService.init();
-        let date: string[] = await this.sessionService.getDays();
-        await this.sessionService.makeAuxTableOne();
-        let sessions: string[] = await this.sessionService.getSessions();
+    filter: MessageDto;
+
+    @Post('/messages')
+    async test(@Body() message: MessageDto): Promise<MessageDto> {
+        console.log(message);
+        this.filter = message;
+        return message;
+    }
+
+
+
+    @Get()
+    async getData(): Promise<[string, string][]> {
+
+        this.sessionService.init();
+        let date: string[] = await this.sessionService.getDays(this.filter.firstDay, this.filter.lastDay);
+        await this.sessionService.makeAuxTableOne(this.filter.company, this.filter.user, this.filter.firstDay, this.filter.lastDay);
+        let sessions: string[] = await this.sessionService.getSessions(this.filter.interval);
         
         //this.sessionService.printArray(date);
         //this.sessionService.printArray(sessions);
@@ -23,7 +35,7 @@ export class DatosSesionesController {
         for (var i = 0; i < date.length; i++) {
             points[i] = [date[i], sessions[i]];
         }
-
+       
         //console.log(date.length);
         //console.log(sessions.length);
 

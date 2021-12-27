@@ -3,12 +3,15 @@ import { ApiService } from '../api.service';
 
 
 interface Data {
-  user: string;
+  
   company: string;
+  user: string;
   interval: number;
   firstDay: string;
   lastDay: string;
 }
+
+
 
 @Component({
   selector: 'app-form',
@@ -18,18 +21,32 @@ interface Data {
 export class FormComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
-
-  points: [string, string][] = [];
+  
 
   ngOnInit(): void {
   }
 
-  onClickSubmit(data: Data ) {
-    console.log('recibimos usuario:' + data.user + ' comp: ' + data.company + ' intervalo: ' + data.interval + ' fechas: ' + data.firstDay + '-' + data.lastDay);
-    this.apiService.getData(data.user, data.company, data.interval, data.firstDay, data.lastDay).subscribe((result) => {
-      this.points = result;
-    });
-    console.log(this.points[0]);
+  async onClickSubmit(data: Data ) {
+   
+    console.log(data);
+    
+
+    let message = {
+      company: data.company,
+      user: data.user,
+      interval: data.interval,
+      firstDay: data.firstDay,
+      lastDay: data.lastDay
+    };
+
+    this.apiService.createMessage(message).toPromise();
+
+    const points: [string, string][] = await this.apiService.getData().toPromise();
+  
+    for (var i = 0; i < points.length; i++) {
+      console.log(points[i]);
+    }
+    
   }
 
 }

@@ -4,10 +4,10 @@ import * as sqlite3 from 'sqlite3';
 var result: string[] = [];
 var users = [];
 var sessions: string[] = [];
-const user = '3';
-const company = '3';
-const firstDay: string = '2017-03-09';
-const lastDay: string = '2017-03-20';
+//const user = '3';
+//const company = '3';
+//const firstDay: string = '2017-03-09';
+//const lastDay: string = '2017-03-20';
 const interval: number = 15;
 
 @Injectable()
@@ -15,6 +15,8 @@ export class SessionService {
 	private db: sqlite3.Database;
 	
 	constructor() { }
+
+	
 
     init(): void {
         const path = 'D:/Descargas/practica_cotalker/nest-angular-proyect/backend/src/datos-sesiones/database/llamadas.db';
@@ -36,7 +38,7 @@ export class SessionService {
 		});
 	};
 
-	getCalendar() {
+	getCalendar(firstDay:string, lastDay:string) {
 		
 		let calendar = `CREATE TABLE Calendar AS
 	                WITH cte AS
@@ -76,13 +78,13 @@ export class SessionService {
 
 	};
 
-	async getDays(): Promise<string[]>{
-		await this.getCalendar();
+	async getDays(fD:string,lD:string): Promise<string[]>{
+		await this.getCalendar(fD,lD);
 		return result;
 	};
 	
 	
-	makeAuxTableAll() {
+	makeAuxTableAll(company: string, firstDay: string, lastDay: string) {
 	
 		let createAuxTable = `CREATE TABLE AuxTable (user_id INTEGER NOT NULL,
 												   occurred_at TEXT NOT NULL)`;
@@ -129,12 +131,12 @@ export class SessionService {
 		});
 	};
 
-	async getUsers(): Promise<string[]> {
-		await this.makeAuxTableAll();
+	async getUsers(company: string, firstDay: string, lastDay: string): Promise<string[]> {
+		await this.makeAuxTableAll(company, firstDay, lastDay);
 		return users;
 	};
 
-	makeAuxTableOne() {
+	makeAuxTableOne(company: string, user: string, firstDay: string, lastDay: string) {
 
 		let createAuxTable = `CREATE TABLE AuxTable (user_id INTEGER NOT NULL,
 												   occurred_at TEXT NOT NULL)`;
@@ -181,12 +183,12 @@ export class SessionService {
 		});
 	};
 
-	async getOneUser(): Promise<string[]> {
-		await this.makeAuxTableOne();
+	async getOneUser(company: string, user: string, firstDay: string, lastDay: string): Promise<string[]> {
+		await this.makeAuxTableOne(company, user, firstDay, lastDay);
 		return users;
 	};
 
-	querySessions() {
+	querySessions(interval:number) {
 
 	let countSessions = `SELECT  Day,
                		CASE WHEN new_session_count
@@ -252,8 +254,8 @@ export class SessionService {
 		});
 	};
 
-	async getSessions(): Promise<string[]> {
-		await this.querySessions();
+	async getSessions(interval:number): Promise<string[]> {
+		await this.querySessions(interval);
 		return sessions;
 	};
 

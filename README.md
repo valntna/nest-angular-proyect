@@ -12,7 +12,7 @@ Aplicación que en base a un archivo .csv grafica las sesiones activas de los us
 Ya que son alrededor de 23 millones de datos se genera una base de datos ```llamadas.db``` en SQLite a través  un script de python ```log.to.database.py```
 Es un proceso corto y facilita el filtro de los datos.
 
-Los queries a la base de datos se hacen en el backend de la aplicación, más precisamente en ```/backend/src/datos-sesiones``` por medio del controlador ```datos-sesiones.controller```
+Los queries a la base de datos se hacen en el backend de la aplicación, más precisamente en ```~/backend/src/datos-sesiones``` por medio del controlador ```datos-sesiones.controller```
  y el servicio ```session-service```
  
  ## Cómo correr la aplicación
@@ -23,7 +23,7 @@ Los queries a la base de datos se hacen en el backend de la aplicación, más pr
  
  Se deben instalar las dependencias de ambos proyectos, para esto preferemente se usa ``npm ci`` pero ```npm install`` tambien sirve.
  Se tiene tanto angular como nest.js por lo que se debe usar dos comandos en forma paralela:
- ```ng serve``` en la AngularCLI y ```npm run start``` para NestJs. 
+ ```ng serve``` en la AngularCLI (``~/frontend``) y ```npm run start``` para NestJs (``~/backend``). 
  
  El servidor del frontend es ```localhost:4200``` y del backend es ```localhost:3000/datos-sesiones```
  

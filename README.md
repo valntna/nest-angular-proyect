@@ -17,8 +17,9 @@ Los queries a la base de datos se hacen en el backend de la aplicación, más pr
  
  ## Cómo correr la aplicación
  
+ Se deben instalar las dependencias de ambos proyectos, para esto preferemente se usa ``npm ci`` pero ```npm install`` tambien sirve.
  Se tiene tanto angular como nest.js por lo que se debe usar dos comandos en forma paralela:
- ```ng serve``` en la AngularCLI y ```npm run start``` para NestJs.
+ ```ng serve``` en la AngularCLI y ```npm run start``` para NestJs. 
  
  El servidor del frontend es ```localhost:4200``` y del backend es ```localhost:3000/datos-sesiones```
  

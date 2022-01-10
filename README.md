@@ -21,7 +21,7 @@ Los queries a la base de datos se hacen en el backend de la aplicación, más pr
  * Angular CLI  - para instalar -> ``npm install -g @angular/cli``
  * NestJs CLI - para instalar -> `` npm i -g @nestjs/cli``
  
- Se deben instalar las dependencias de ambos proyectos, para esto preferemente se usa ``npm ci`` pero ```npm install`` tambien sirve.
+ Se deben instalar las dependencias de ambos proyectos, para esto preferemente se usa ``npm ci`` pero ``npm install`` tambien sirve.
  Se tiene tanto angular como nest.js por lo que se debe usar dos comandos en forma paralela:
  ```ng serve``` en la AngularCLI (``~/frontend``) y ```npm run start``` para NestJs (``~/backend``). 
  
